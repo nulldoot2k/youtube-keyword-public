@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Tags & Hashtags Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="yt-badge">
+      <svg viewBox="0 0 24 24">
+        <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+      </svg>
+      SEO Generator
+    </div>
+    <h1>TAGS & <span>HASHTAGS</span><br>GENERATOR</h1>
+    <p class="subtitle">Tối ưu SEO YouTube · Giới hạn 500 ký tự · DatVu Youtube</p>
+  </div>
+
+  <!-- ── Input Form ── -->
+  <div class="form-card">
+    <div class="field">
+      <label>📌 Chủ đề chính</label>
+      <input type="text" id="topic"
+        placeholder="Ví dụ: Phục Hồi Xe, Độ Xe Máy, Siêu Xe Việt Nam..."
+        value="" />
+      <div class="field-hint">Keyword chủ lực của kênh — ưu tiên rank cao nhất</div>
+    </div>
+
+    <div class="field">
+      <label>🎬 Tiêu đề video</label>
+      <textarea id="title"
+        placeholder="Ví dụ: Phục Chế Siêu Xe Pagani Zonda Rỉ Sét 10$ | Từ Đống Phế Liệu Trở Thành Siêu Xe 50 TỶ ĐÔ LA?"></textarea>
+      <div class="field-hint">Càng chi tiết, tags càng chính xác</div>
+    </div>
+
+    <div class="opts-row">
+      <span class="option-label">SỐ HASHTAGS DESCRIPTION</span>
+      <div class="counter">
+        <button onclick="adjustHash(-1)">−</button>
+        <span id="numHashDisplay">10</span>
+        <button onclick="adjustHash(1)">+</button>
+      </div>
+    </div>
+
+    <button class="btn-generate" onclick="generate()">⚡ GENERATE — CHUẨN SEO</button>
+  </div>
+
+  <!-- ── Results ── -->
+  <div class="results" id="results">
+
+    <!-- Title suggestions -->
+    <div id="titleSuggestBlock" style="display:none">
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-title">
+            🎯 Đề Xuất Tiêu Đề Mạnh
+            <span class="count-badge">3</span>
+          </div>
+          <span class="suggest-hint">CLICK ĐỂ ÁP DỤNG &amp; CẬP NHẬT TAGS</span>
+        </div>
+        <div class="result-body">
+          <div id="titleSuggestions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags block -->
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-title">
+          🏷 Tags YouTube Studio
+          <span class="count-badge" id="tagCount">0</span>
+        </div>
+        <div class="char-meter">
+          <div class="char-bar-wrap">
+            <div class="char-bar" id="charBar"></div>
+          </div>
+          <span class="char-num" id="charNum">0 / 500</span>
+        </div>
+        <button class="btn-copy" id="copyTagsBtn" onclick="copyTags()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          COPY ALL
+        </button>
+      </div>
+      <div class="result-body">
+        <div class="legend">
+          <div class="legend-item"><div class="dot t1"></div> Tier 1 – Keyword chính (mạnh nhất)</div>
+          <div class="legend-item"><div class="dot t2"></div> Tier 2 – Long-tail &amp; xu hướng</div>
+          <div class="legend-item"><div class="dot t3"></div> Tier 3 – Mở rộng reach</div>
+        </div>
+        <div class="tags-wrap" id="tagsPills"></div>
+        <div class="section-label">Paste vào YouTube Studio › Tags</div>
+        <div class="paste-area" id="tagsPaste"></div>
+      </div>
+    </div>
+
+    <!-- Hashtags block -->
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-title">
+          # Hashtags Description
+          <span class="count-badge" id="hashCount">0</span>
+        </div>
+        <button class="btn-copy" id="copyHashBtn" onclick="copyHash()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          COPY ALL
+        </button>
+      </div>
+      <div class="result-body">
+        <div class="tags-wrap" id="hashPills"></div>
+        <div class="section-label">Paste cuối Description (tối đa 3 hashtag đầu sẽ hiện trên video)</div>
+        <div class="paste-area" id="hashPaste"></div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips">
+      <div class="tips-title">💡 Chiến lược SEO YouTube</div>
+      <ul>
+        <li><strong>Tier 1</strong> — khớp chính xác tiêu đề: thuật toán đọc 2–3 tag đầu, đây là quan trọng nhất</li>
+        <li><strong>Tier 2</strong> — long-tail &amp; cụm xu hướng: giúp video vào Suggested trong niche xe VN</li>
+        <li><strong>Tier 3</strong> — mix tiếng Việt/Anh &amp; không dấu: mở rộng impressions tìm kiếm đa ngôn ngữ</li>
+        <li>Tags tự động cắt đúng giới hạn 500 ký tự của YouTube</li>
+        <li>Chỉ cần 3–5 hashtags là đủ — YouTube chỉ hiện 3 hashtag đầu ngay trên video</li>
+      </ul>
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /container -->
+
+<script src="app.js"></script>
+</body>
+</html>
